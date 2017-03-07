@@ -38,54 +38,67 @@ if [[ "$MesurePIR" == "ON" ]]; then
 MesurePIR="ON"
 
 Traitement_CalculDiffernceHetPIR # traitement des variables relevées
+
 Traitement_yeux
 
 # ----------------------------------------------------------------------------------------------------------
 # ----------------------------------------------------------------------------------------------------------
+	if [ "$DERPIRHEUREHEURE" -gt "$PIRHDEBUTPARLER" ]; then
 
-if [ "$DERPIRHEUREHEURE" > "$PIRHDEBUTPARLER" ]; then
+	# PIRtraitementpour="reveil"
+	# PIRDIRE_DEBUT="C'est bien on se reveil !"
+	# PIRDIRE_ORDER="météo puis fête à qui puis une citation" # Que doit t-il énoncé au réveil du matin ?
+	# PIRDIRE_FIN="Voilà bonne journée tout le monde"
+	# PIR_DIRE_REP_A="18:00"
 
-# PIRtraitementpour="reveil"
-# PIRDIRE_DEBUT="C'est bien on se reveil !"
-# PIRDIRE_ORDER="météo puis fête à qui puis une citation" # Que doit t-il énoncé au réveil du matin ?
-# PIRDIRE_FIN="Voilà bonne journée tout le monde"
+	PIRNEZ 1
 
-varpir="$jv_dir/plugins/jarvis-plug-PIR"
-
-PIRCONFIGAUTOTAL=$(grep -c 'PIR_DIRE_ORDER=' $varpir/config.sh)
-PIRCONFIGAUTOTAL=$(($PIRCONFIGAUTOTAL + 1 ))
-ProgrammePIRNum="1"
-while test $ProgrammePIRNum != $PIRCONFIGAUTOTAL
-do
-
-PIRtraitementpour=$(grep 'PIR_traitement_pour=' $varpir/config.sh | sed -n $ProgrammePIRNum\p | sed -e "s/PIR_traitement_pour=//g" | sed -e 's/"//g' | cut -d '#' -f 1)
-PIRDIRE_ORDER=$(grep 'PIR_DIRE_ORDER=' $varpir/config.sh | sed -n $ProgrammePIRNum\p | sed -e "s/PIR_DIRE_ORDER=//g" | sed -e 's/"//g' | cut -d '#' -f 1)
-PIRDIRE_DEBUT=$(grep 'PIR_DIRE_DEBUT=' $varpir/config.sh | sed -n $ProgrammePIRNum\p | sed -e "s/PIR_DIRE_DEBUT=//g" | sed -e 's/"//g' | cut -d '#' -f 1)
-PIRDIRE_FIN=$(grep 'PIR_DIRE_FIN=' $varpir/config.sh | sed -n $ProgrammePIRNum\p | sed -e "s/PIR_DIRE_FIN=//g" | sed -e 's/"//g' | cut -d '#' -f 1)
-ProgrammePIRNum=$(($ProgrammePIRNum + 1))
-
-pirrelevedonne_fichierexiste # est-ce que le fichier existe ?
-
-if [[ "$REP_PROCHAIN_1OU0" = "0" ]]; then 
-pirrelevedonne_Go # Première fois donc je lis
-fi
-
-# #####   echo "j'ai traité $PIRDIRE_ORDER"
-done
+	varpir="$jv_dir/plugins/jarvis-plug-PIR"
+	PIRCONFIGAUTOTAL=$(grep -c 'PIR_DIRE_ORDER=' $varpir/config.sh)
+	PIRCONFIGAUTOTAL=$(($PIRCONFIGAUTOTAL + 1 ))
+	ProgrammePIRNum="1"
 
 
-# Traitement pour : "Prochain pour simplement dire bonjour de temps en temps"
-Traitement_bonjour
+	while test $ProgrammePIRNum != $PIRCONFIGAUTOTAL
+	do
 
-# Traitement pour : "Prochain la matin au réveil météo et la saint"
-# Traitement pour : "Prochain évènement" Dire 2 fois dans la journée matin après 8h et après midi après 18h"
-#  ###### a revoir celui ci !!!! Traitement_Prochainevenement
+	PIRtraitementpour=$(grep 'PIR_traitement_pour=' $varpir/config.sh | sed -n $ProgrammePIRNum\p | sed -e "s/PIR_traitement_pour=//g" | sed -e 's/"//g' | cut -d '#' -f 1)
+	PIRDIRE_ORDER=$(grep 'PIR_DIRE_ORDER=' $varpir/config.sh | sed -n $ProgrammePIRNum\p | sed -e "s/PIR_DIRE_ORDER=//g" | sed -e 's/"//g' | cut -d '#' -f 1)
+	PIRDIRE_DEBUT=$(grep 'PIR_DIRE_DEBUT=' $varpir/config.sh | sed -n $ProgrammePIRNum\p | sed -e "s/PIR_DIRE_DEBUT=//g" | sed -e 's/"//g' | cut -d '#' -f 1)
+	PIRDIRE_FIN=$(grep 'PIR_DIRE_FIN=' $varpir/config.sh | sed -n $ProgrammePIRNum\p | sed -e "s/PIR_DIRE_FIN=//g" | sed -e 's/"//g' | cut -d '#' -f 1)
+	PIRDIRE_REPAQH=$(grep 'PIR_DIRE_REP_AQH=' $varpir/config.sh | sed -n $ProgrammePIRNum\p | sed -e "s/PIR_DIRE_REP_AQH=//g" | sed -e 's/"//g' | cut -d ':' -f 1)
+
+	if [ "$PIRDIRE_REPAQH" = "" ]; then PIRDIRE_REPAQH="24"; fi
+
+	ProgrammePIRNum=$(($ProgrammePIRNum + 1))
+
+	pirrelevedonne_fichierexiste # est-ce que le fichier existe ?
+		if [[ "$PIRDIRE_REP1OU0" = "0" ]]; then 
+		pirrelevedonne_Go # Première fois donc je lis
+		fi
+		
+		if [ "$DERPIRHEUREHEURE" -gt "$PIRDIRE_REPAQH" ]; then # répère si heure nouvel rép est demandé
+			if [[ "$PIRDIRE_REP1OU0" = "0" ]]; then 
+			pirrelevedonnerep_Go
+			# Première fois donc je lis
+			fi
+		fi
+	# #####   echo "j'ai traité $PIRDIRE_ORDER"
+	done
+
+	# Traitement pour : "Prochain pour simplement dire bonjour de temps en temps"
+	Traitement_bonjour
+
+	# Traitement pour : "Prochain la matin au réveil météo et la saint"
+	# Traitement pour : "Prochain évènement" Dire 2 fois dans la journée matin après 8h et après midi après 18h"
+	#  ###### a revoir celui ci !!!! Traitement_Prochainevenement
 
 
-# Traitement pour : "Dire si JB est souvent devant son pc ou pas"
-Traitement_Tuessouventlaoupas
+	# Traitement pour : "Dire si JB est souvent devant son pc ou pas"
+	Traitement_Tuessouventlaoupas # #####
+	fi
 
-fi
+
 # ----------------------------------------------------------------------------------------------------------
 # ----------------------------------------------------------------------------------------------------------
 # Fin j'enregistre heure du dernièr PIR à ON
@@ -110,15 +123,18 @@ pirrelevedonne_fichierexiste() {
 if [ -f "$varpir/$PIRtraitementpour.txt" ]; then
 REP_PROCHAIN_1OU0=`cat $varpir/$PIRtraitementpour.txt | cut -d',' -f1`     # 1=Fait  ou 0=Pas encore
 REP_PROCHAIN_JOUR=`cat $varpir/$PIRtraitementpour.txt | cut -d',' -f2` # Jour ou c'est fait
+PIRDIRE_REP1OU0=`cat $varpir/$PIRtraitementpour.txt | cut -d',' -f3` # Ai je répété le PIRDIRE_REPAQH ?
+
 else
 REP_PROCHAINJOURL="$PIRHEUREJOUR"
-echo "$REP_PROCHAIN_1OU0,$REP_PROCHAIN_JOUR" > $varpir/$PIRtraitementpour.txt 
+echo "$REP_PROCHAIN_1OU0,$REP_PROCHAIN_JOUR,$PIRDIRE_REP1OU0" > $varpir/$PIRtraitementpour.txt 
 fi
 
 # est-ce un nouveau jour depuis dernière relevée ?
 if [[ "$REP_PROCHAIN_JOUR" != "$PIRHEUREJOUR" ]]; then # est-ce un nouveau jour depuis dernière relevée ?
 REP_PROCHAIN_1OU0="0"
-echo "$REP_PROCHAIN_1OU0,$PIRHEUREJOUR" > $varpir/$PIRtraitementpour.txt 
+PIRDIRE_REP1OU0="0"
+echo "$REP_PROCHAIN_1OU0,$PIRHEUREJOUR,$PIRDIRE_REP1OU0" > $varpir/$PIRtraitementpour.txt 
 fi
 }
 
@@ -128,13 +144,21 @@ say "$PIRDIREL_DEBUT"
 jv_handle_order $PIRDIRE_ORDER 
 say "$PIRDIRE_FIN"
 REP_PROCHAIN_1OU0=$(($REP_PROCHAIN_1OU0 + 1))
-echo "$REP_PROCHAIN_1OU0,$PIRHEUREJOUR" > $varpir/$PIRtraitementpour.txt 
+echo "$REP_PROCHAIN_1OU0,$PIRHEUREJOUR,$PIRDIRE_REP1OU0" > $varpir/$PIRtraitementpour.txt 
+}
+
+pirrelevedonnerep_Go() {
+# Nouveau a faire si condition réuni
+say "$PIRDIREL_DEBUT"
+jv_handle_order $PIRDIRE_ORDER 
+say "$PIRDIRE_FIN"
+PIRDIRE_REP1OU0=$(($PIRDIRE_REP1OU0 + 1))
+echo "$REP_PROCHAIN_1OU0,$PIRHEUREJOUR,$PIRDIRE_REP1OU0" > $varpir/$PIRtraitementpour.txt 
 }
 
 
 # ----------------------------------------------------------------------------------------------------------
 Traitement_Prochainevenement() {
-
 # Traitement pour : "Prochain évènement" Dire 2 fois dans la journée matin après 8h et après midi après 18h UNIQUEMENT si il y a quelque chose pour le mois en cours
 
 reponsePIRMAITRE=`curl -s "http://192.168.0.17:8087?order=POURPLUGINPIRESCLAVE&mute=true"`
@@ -154,7 +178,7 @@ if [[ "$reponsePIRMAITRE" =~ "1" ]]; then
 	REP_PROCHAIN_EVENEMENT="0"
 	fi
 
-	if [ "$DERPIRHEUREHEURE" > "$PIRHDEBUTPARLER" ]; then
+	if [ "$DERPIRHEUREHEURE" -gt "$PIRHDEBUTPARLER" ]; then
 
 		if [[ "$REP_PROCHAIN_EVENEMENT" = "1" ]]; then 
 		return
@@ -165,7 +189,7 @@ if [[ "$reponsePIRMAITRE" =~ "1" ]]; then
 		fi
 	fi
 
-	if [[ "$DERPIRHEUREHEURE" > "18" ]] && [[ "$DERPIRHEUREHEURE" < "$PIRHFINPARLER" ]]; then
+	if [[ "$DERPIRHEUREHEURE" -gt "18" ]] && [[ "$DERPIRHEUREHEURE" -lt "$PIRHFINPARLER" ]]; then
 		if [[ "$REP_PROCHAIN_EVENEMENT" = "2" ]]; then 
 		return
 		else
@@ -205,7 +229,7 @@ Traitement_Tuessouventlaoupas() {
 	fi
 
 
-	if [ "$DERPIRHEUREHEURE" > "$PIRHDEBUTPARLER" ]; then
+	if [ "$DERPIRHEUREHEURE" -gt "$PIRHDEBUTPARLER" ]; then
 
 		# if [[ "$REP_PROCHAIN_LAOUPAS" = "1" ]]; then 
 		# return
@@ -221,8 +245,8 @@ if [[ "$DERPIR_MesurePIR" = "OFF" ]]; then
 REP_NBREFOIS_LAOUPAS="0"
 
 
-			if [[ "$DIFFTEMPSPIRDER_HEURE" > "0" ]] && [[ "$REP_PHRASENUM" != "3" ]]; then # il y a plus d'une heure de passé entre le PIR et Enregistrement
-				if [[ "$DIFFTEMPSPIRDER_HEURE" > "2" ]]; then
+			if [[ "$DIFFTEMPSPIRDER_HEURE" -gt "0" ]] && [[ "$REP_PHRASENUM" != "3" ]]; then # il y a plus d'une heure de passé entre le PIR et Enregistrement
+				if [[ "$DIFFTEMPSPIRDER_HEURE" -gt "2" ]]; then
 				REP_PHRASENUM="3"
 				say 'Et coucou il y a plus de deux heures que je ne t'avais pas vu... j'espère que tout va bien ?'
 				fi
@@ -241,7 +265,7 @@ fi
 		fi
 
 		if [[ "$DIFFTEMPSPIRDER_HEURE" = "0" ]] && [[ "$REP_PHRASENUM" != "1" ]]; then # il y a moins  d'une heure de passé entre le PIR et Enregistrement
-			if [[ "$REP_NBREFOIS_LAOUPAS" > "10" ]]; then # plys de 50 minuteso u JB est dans la pièce
+			if [[ "$REP_NBREFOIS_LAOUPAS" -gt "10" ]]; then # plys de 50 minuteso u JB est dans la pièce
 			REP_PHRASENUM="1"
 			say "Jibé tu devrais vraiment te dégourdir un peu les jambes... ca fais presque 1 heure que tu es assi"
 			fi
@@ -276,7 +300,8 @@ if [ `echo ${PIRHDEBUTPARLER:0:1}` = "0" ]; then PIRHDEBUTPARLER=`echo ${PIRHDEB
 varpir="$jv_dir/plugins/jarvis-plug-PIR"
 
 	if [ -f "$varpir/mesurepir.txt" ]; then # est-ce que le fichier existe ?
-	echo "" > /dev/null
+#	echo "" > /dev/null
+echo ""
 	else
 	echo "$PIRHEUREJOUR,$PIRHEUREMOI,$PIRHEUREHEURE,$PIRHEUREMIN,$PIR_NBREFOIS_LAOUPAS,$MesurePIR" > $varpir/mesurepir.txt 
 	fi
@@ -307,7 +332,7 @@ Traitement_yeux() {
 $PIRNEZ 1; $PIROEILDROIT 1; $PIROEILGAUCHE 1
 
 	
-if [ "$DERPIRHEUREHEURE" > "$PIRHDEBUTPARLER" ]; then 
+if [ "$DERPIRHEUREHEURE" -gt "$PIRHDEBUTPARLER" ]; then 
 
 
 	if [ "$DERPIRHEUREHEURE" -lt "$PIRHFINPARLER" ]; then 
@@ -323,6 +348,14 @@ fi
 }
 
 #----------------------------------------------------------------------------
+
+Traitement_Yeux_Nuit(à) {
+if [ "$DERPIRHEUREHEURE" -gt "$PIRLUMIEREOFFNUIT" ]; then
+$PIRNEZ 0
+$PIROEILDROIT 0
+$PIROEILGAUCHE 0
+fi
+}
 
 Traitement_yeuxFin() {
 $PIROEILDROIT 0; $PIROEILGAUCHE 0
