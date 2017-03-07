@@ -11,7 +11,7 @@ For multi-language plugin:
 -->
 ## Description
 
-Si vous avez la même configuration que moi... voir ici:
+Si vous avez la même configuration que moi un jarvis avec des leds et un detecteur de mouvement... voir ici:
 https://github.com/Jean-Bernard-Hallez/jarvis-testjb/blob/master/Jarvis%20de%20JB-2.pdf
 Vous pourrez alors configurer vous même ceci qui est l'exemple du mien:
 PIROEILGAUCHE="gpio write 0" # GPIO Oeil Gauche

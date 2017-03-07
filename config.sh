@@ -25,5 +25,11 @@ PIDR_DIRE_ORDER="prochain évènement" # Que doit t-il énoncé au réveil du ma
 PIDR_DIRE_FIN=""
 PIDR_DIRE_REP_AQH=""
 
+# 3)
+PIR_traitement_pour="citation"
+PIR_DIRE_DEBUT="Positif attitude:"
+PIR_DIRE_ORDER="un proverbe" # Que doit t-il énoncé au réveil du matin ?
+PIR_DIRE_FIN=""
+PIR_DIRE_REP_AQH="12"
 
 

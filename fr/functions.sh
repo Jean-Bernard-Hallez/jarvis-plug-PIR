@@ -51,7 +51,9 @@ Traitement_yeux
 	# PIRDIRE_FIN="Voilà bonne journée tout le monde"
 	# PIR_DIRE_REP_A="18:00"
 
-	PIRNEZ 1
+	if [ "$DERPIRHEUREHEURE" = "0" ]; then
+	$PIRNEZ 1
+	fi
 
 	varpir="$jv_dir/plugins/jarvis-plug-PIR"
 	PIRCONFIGAUTOTAL=$(grep -c 'PIR_DIRE_ORDER=' $varpir/config.sh)
@@ -349,7 +351,7 @@ fi
 
 #----------------------------------------------------------------------------
 
-Traitement_Yeux_Nuit(à) {
+Traitement_Yeux_Nuit() {
 if [ "$DERPIRHEUREHEURE" -gt "$PIRLUMIEREOFFNUIT" ]; then
 $PIRNEZ 0
 $PIROEILDROIT 0
