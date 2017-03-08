@@ -14,22 +14,23 @@ PIRLUMIEREOFFNUIT="22" # A partir de quelle heure je mets en veille toutes mes l
 # 1)
 PIR_traitement_pour="reveil"
 PIR_DIRE_DEBUT="C'est bien on se reveil !"
-PIR_DIRE_ORDER="météo puis fête à qui puis une citation" # Que doit t-il énoncé au réveil du matin ?
+PIR_DIRE_ORDER="météo puis fête à qui puis une citation" # Que doit t-il énoncé  ?
 PIR_DIRE_FIN="Voilà bonne journée tout le monde"
-PIR_DIRE_REP_AQH="19:00"
+PIR_DIRE_REP_AQH="06:35 12:00 13:30 19:00 21:00"
 
 # 2)
-PIDR_traitement_pour="prochainevenement"
-PIDR_DIRE_DEBUT=""
-PIDR_DIRE_ORDER="prochain évènement" # Que doit t-il énoncé au réveil du matin ?
-PIDR_DIRE_FIN=""
-PIDR_DIRE_REP_AQH=""
+PIR_traitement_pour="prochainevenement"
+PIR_DIRE_DEBUT=" "
+PIR_DIRE_ORDER="prochain évènement" # Que doit t-il énoncé  ?
+PIR_DIRE_FIN=" "
+PIR_DIRE_REP_AQH="06:35 12:00"
+
 
 # 3)
 PIR_traitement_pour="citation"
 PIR_DIRE_DEBUT="Positif attitude:"
-PIR_DIRE_ORDER="un proverbe" # Que doit t-il énoncé au réveil du matin ?
+PIR_DIRE_ORDER="un proverbe" # Que doit t-il énoncé  ?
 PIR_DIRE_FIN=""
-PIR_DIRE_REP_AQH="12"
+PIR_DIRE_REP_AQH="06:00 12:40 19:00"
 
 
