@@ -36,35 +36,48 @@ Divers traitements:
 1)
 PIR_traitement_pour="reveil"
 PIR_DIRE_DEBUT="C'est bien on se reveil !"
-PIR_DIRE_ORDER="météo puis fête à qui puis une citation" # Que doit t-il énoncé au réveil du matin ?
+PIR_DIRE_ORDER="météo puis fête à qui puis prochainevenement puis une citation" # Que doit t-il énoncé  ?
 PIR_DIRE_FIN="Voilà bonne journée tout le monde"
-PIR_DIRE_REP_AQH=""
+PIR_DIRE_REP_AQH="08:00"
 
 2)
-PIDR_traitement_pour="prochainevenement"
-PIDR_DIRE_DEBUT=""
-PIDR_DIRE_ORDER="prochain évènement" # Que doit t-il énoncé au réveil du matin ?
-PIDR_DIRE_FIN=""
-PIDR_DIRE_REP_AQH=""
+PIR_traitement_pour="prochainevenement"
+PIR_DIRE_DEBUT=" "
+PIR_DIRE_ORDER="prochain évènement" # Que doit t-il énoncé  ?
+PIR_DIRE_FIN=" "
+PIR_DIRE_REP_AQH="18:00"
+
 
 3)
 PIR_traitement_pour="citation"
 PIR_DIRE_DEBUT="Positif attitude:"
-PIR_DIRE_ORDER="un proverbe" # Que doit t-il énoncé au réveil du matin ?
+PIR_DIRE_ORDER="un proverbe" # Que doit t-il énoncé  ?
 PIR_DIRE_FIN=""
-PIR_DIRE_REP_AQH="12"
+PIR_DIRE_REP_AQH="12:00 15:40 20:00"
+
+4)
+PIR_traitement_pour="blague"
+PIR_DIRE_DEBUT="La blague du jour:"
+PIR_DIRE_ORDER="raconte une blague" # Que doit t-il énoncé  ?
+PIR_DIRE_FIN=""
+PIR_DIRE_REP_AQH="17:00"
+
 
 Le soir à 20h00 il se met en mode silencieux
 Le soir à 22 heures il coupe ses lumières et dort
 Le matin à 7h00 il allume son "nez" pour dire qu'il est opérationnel et reprend la parole
 
 
-A partir de 7h00 si je passe devant le détecteur de mouvement il me dit:
-La météo et un proverbe
+A partir de 8h00 si je passe devant le détecteur de mouvement il me dit:
+La météo (plugin), le prochain évènement (plugin) et un proverbe (plugin)
 
-Dans la journée si je suis trop devant il me demande de dégourdir les jambes
+A 17h00 il raconte une blague
 
-A midi il me sort une citation
+Dans la journée si je suis trop devant il me demande de dégourdir les jambes, il me parle justep our dire bonjour ou comment ca va...
+
+A midi, 12h40 et 20h il me sort une citation, 
+
+
 
 etc...
 
