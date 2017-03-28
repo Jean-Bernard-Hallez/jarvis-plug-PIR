@@ -1,0 +1,7 @@
+$verbose && jv_debug "DEBUG: program_startup hook"
+gpio mode $PIROEILGAUCHE_GPIO out 
+gpio mode $PIROEILDROIT_GPIO out 
+gpio mode $PIRNEZ_GPIO out 
+gpio mode $PIRDETECTEUR_GPIO in
+say "Détecteur P I R en service..."
+/home/pi/jarvis/plugins/jarvis-plug-PIR/control-pir.sh &

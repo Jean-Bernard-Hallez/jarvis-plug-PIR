@@ -1,0 +1,6 @@
+$verbose && jv_debug "DEBUG: program_exit hook"
+(( $1 )) && say "J'ai rencontré une erreur, relancez-moi!"
+
+gpio write $PIROEILGAUCHE_GPIO 0
+gpio write $PIROEILDROIT_GPIO 0
+gpio write 3 0
