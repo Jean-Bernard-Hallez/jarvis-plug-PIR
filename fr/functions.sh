@@ -45,7 +45,7 @@ fi
 if [[ "$MesurePIR" == "ON" ]]; then 
 
 Traitement_CalculDiffernceHetPIR # traitement des variables relevées
-echo "$PIRHEUREMIN - $DERPIRHEUREMIN"
+
 PIR_ACTION_TOUTES_LES_DIFF=$(( $PIRHEUREMIN - $DERPIRHEUREMIN ))
 PIR_ACTION_TOUTES_LES_DIFFH=$(( $PIRHEUREHEURE - $DERPIRHEUREHEURE ))
 
