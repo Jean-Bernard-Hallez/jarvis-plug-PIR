@@ -51,6 +51,7 @@ PIR_ACTION_TOUTES_LES_DIFF=$(( $PIRHEUREMIN - $DERPIRHEUREMIN ))
 	Pir_FEUX_VERT="Ok"
 	else
 	Pir_FEUX_VERT=""
+	jv_warning "Pir à 1 mais Pluging bloqué car il reste encore $(( $PIR_ACTION_TOUTES_LES - $PIR_ACTION_TOUTES_LES_DIFF )) minutes / $PIR_ACTION_TOUTES_LES (voir PIR_ACTION_TOUTES_LES dans le fichier cconfig.sh)"
 	fi
 fi
 
