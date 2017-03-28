@@ -46,8 +46,8 @@ if [[ "$MesurePIR" == "ON" ]]; then
 
 Traitement_CalculDiffernceHetPIR # traitement des variables relevées
 
-PIR_ACTION_TOUTES_LES_DIFF=$(( $PIRHEUREMIN - $DERPIRHEUREMIN ))
-PIR_ACTION_TOUTES_LES_DIFFH=$(( $PIRHEUREHEURE - $DERPIRHEUREHEURE ))
+PIR_ACTION_TOUTES_LES_DIFF=$(( (`echo "$PIRHEUREMIN" |  sed  -e 's/^0//g'`) - (`echo "$DERPIRHEUREMIN" |  sed  -e 's/^0//g'`) ))
+PIR_ACTION_TOUTES_LES_DIFFH=$(( (`echo "$PIRHEUREHEURE" |  sed  -e 's/^0//g'`)  - (`echo "$DERPIRHEUREHEURE" |  sed  -e 's/^0//g'`) ))
 
 	if [[ "$PIR_ACTION_TOUTES_LES_DIFFH" == "0" ]]; then
 
