@@ -43,15 +43,22 @@ fi
 
 
 if [[ "$MesurePIR" == "ON" ]]; then 
+
 Traitement_CalculDiffernceHetPIR # traitement des variables relevées
-
+echo "$PIRHEUREMIN - $DERPIRHEUREMIN"
 PIR_ACTION_TOUTES_LES_DIFF=$(( $PIRHEUREMIN - $DERPIRHEUREMIN ))
+PIR_ACTION_TOUTES_LES_DIFFH=$(( $PIRHEUREHEURE - $DERPIRHEUREHEURE ))
 
-	if [[ "$PIR_ACTION_TOUTES_LES_DIFF" -gt "$PIR_ACTION_TOUTES_LES" ]]; then
-	Pir_FEUX_VERT="Ok"
+	if [[ "$PIR_ACTION_TOUTES_LES_DIFFH" == "0" ]]; then
+
+		if [[ "$PIR_ACTION_TOUTES_LES_DIFF" -gt "$PIR_ACTION_TOUTES_LES" ]]; then
+		Pir_FEUX_VERT="Ok"
+		else
+		Pir_FEUX_VERT=""
+		jv_warning "Pir à 1 mais Pluging bloqué car il reste encore $(( $PIR_ACTION_TOUTES_LES - $PIR_ACTION_TOUTES_LES_DIFF )) minutes / $PIR_ACTION_TOUTES_LES (voir PIR_ACTION_TOUTES_LES dans le fichier cconfig.sh)"
+		fi
 	else
-	Pir_FEUX_VERT=""
-	jv_warning "Pir à 1 mais Pluging bloqué car il reste encore $(( $PIR_ACTION_TOUTES_LES - $PIR_ACTION_TOUTES_LES_DIFF )) minutes / $PIR_ACTION_TOUTES_LES (voir PIR_ACTION_TOUTES_LES dans le fichier cconfig.sh)"
+	Pir_FEUX_VERT="Ok"
 	fi
 fi
 
