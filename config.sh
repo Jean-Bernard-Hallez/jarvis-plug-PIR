@@ -12,6 +12,7 @@ PIRLOG="ON"          			 # ON = enregistre tous les état de pir OFF = ne le fai
 PIRHDEBUTPARLER="07" 			 # A partir de quelle heure mon PIR se réveille ? Il faut 2 chiffres !!
 PIRHFINPARLER="21"    			 # A partir de quelle heure mon PIR ne parle plus ? Il faut 2 chiffres !!
 PIRLUMIEREOFFNUIT="22"			 # A partir de quelle heure je mets en veille toutes mes lumières ??
+PIR_ACTION_TOUTES_LES="5"               # Toutes les (en minute) et si PIR = 1 j'exécute tout ce qu'il y a ci dessous:
 
 # A chaque détection du PIR à 1
 PIRACHAQUEDETECTION_ORDER="fais R2D2"  

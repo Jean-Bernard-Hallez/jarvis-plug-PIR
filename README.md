@@ -11,7 +11,7 @@ For multi-language plugin:
 -->
 ## Description
 
-28/03/2017 Fonctionnement du PIR comme Alarme avec domoticz Par exemple
+28/03/2017 Fonctionnement du PIR indépendamment comme Alarme avec domoticz Par exemple / Meilleure stabilité du fonctionnement
 Si vous avez la même configuration que moi un jarvis avec des leds et un detecteur de mouvement... voir ici:
 https://github.com/Jean-Bernard-Hallez/jarvis-testjb/blob/master/Jarvis%20de%20JB-2.pdf
 
@@ -34,12 +34,16 @@ PIRLOG="ON"          			 # ON = enregistre tous les état de pir OFF = ne le fai
 PIRHDEBUTPARLER="07" 			 # A partir de quelle heure mon PIR se réveille ? Il faut 2 chiffres !!
 PIRHFINPARLER="21"    			 # A partir de quelle heure mon PIR ne parle plus ? Il faut 2 chiffres !!
 PIRLUMIEREOFFNUIT="22"			 # A partir de quelle heure je mets en veille toutes mes lumières ??
+PIR_ACTION_TOUTES_LES="5" 		 # Si Pir à 1 tous les combiens de temps (exprimé en minute) je dois vérifier mes fonctions si dessous: 
 
 # A chaque détection du PIR à 1
 PIRACHAQUEDETECTION_ORDER="fais R2D2"  
 PIRACHAQUEDETECTION_SAY=""    
 
-# Divers traitements:
+
+#### Divers traitements: ####
+
+
 # 1)
 PIR_traitement_pour="reveil"
 PIR_DIRE_DEBUT="C'est bien on se reveil !"

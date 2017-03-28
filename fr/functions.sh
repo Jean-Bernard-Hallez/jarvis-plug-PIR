@@ -42,14 +42,29 @@ DER_MesurePIR=`cat $varpir/mesurepir.txt | cut -d',' -f7`
 fi
 
 
-
 if [[ "$MesurePIR" == "ON" ]]; then 
+Traitement_CalculDiffernceHetPIR # traitement des variables relevées
+
+PIR_ACTION_TOUTES_LES_DIFF=$(( $PIRHEUREMIN - $DERPIRHEUREMIN ))
+
+	if [[ "$PIR_ACTION_TOUTES_LES_DIFF" -gt "$PIR_ACTION_TOUTES_LES" ]]; then
+	Pir_FEUX_VERT="Ok"
+	else
+	Pir_FEUX_VERT=""
+	fi
+fi
+
+
+
+######################## # Ok j'ai le feux vert je continue:
+
+if [[ "$Pir_FEUX_VERT" == "Ok" ]]; then 
 varpir="$jv_dir/plugins/jarvis-plug-PIR/traitementPIR"
 varpirconfig="$jv_dir/plugins/jarvis-plug-PIR"
 DER_MesurePIR=`cat $varpir/mesurepir.txt | cut -d',' -f7`
 
 
-if [[ "$PIR_ALARME" == "ON" ]] ; then 
+if [[ "$Pir_FEUX_VERT" == "Ok" ]] ; then 
 varpir="$jv_dir/plugins/jarvis-plug-PIR/traitementPIR"
 varpirconfig="$jv_dir/plugins/jarvis-plug-PIR"
 PIR_ALARME_ETAT=`cat $varpir/ALARME.txt`
@@ -61,10 +76,6 @@ PIR_ALARME_ETAT=`cat $varpir/ALARME.txt`
 fi
 
 
-# say "Capteur ON"
-MesurePIR="ON"
-
-Traitement_CalculDiffernceHetPIR # traitement des variables relevées
 
 Traitement_yeux
 
@@ -421,7 +432,7 @@ if [ `echo ${PIRHDEBUTPARLER:0:1}` = "0" ]; then PIRHDEBUTPARLER=`echo ${PIRHDEB
 DERPIRHEUREJOUR=`cat $varpir/mesurepir.txt | cut -d',' -f1`
 DERPIRHEUREMOI=`cat $varpir/mesurepir.txt | cut -d',' -f2`
 DERPIRHEUREHEURE=`cat $varpir/mesurepir.txt | cut -d',' -f3`
-DERPIRHEUREMIN=`cat $varpir/mesurepir.txt | cut -d',' -f5`
+DERPIRHEUREMIN=`cat $varpir/mesurepir.txt | cut -d',' -f4`
 DERPIR_NBREFOIS_LAOUPAS=`cat $varpir/mesurepir.txt | cut -d',' -f5`
 DERPIR_MesurePIR=`cat $varpir/mesurepir.txt | cut -d',' -f6`
 DERPIR_OPTION_MESURE=`cat $varpir/mesurepir.txt | cut -d',' -f7`
