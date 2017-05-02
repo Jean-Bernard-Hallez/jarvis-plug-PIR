@@ -3,5 +3,6 @@ gpio mode $PIROEILGAUCHE_GPIO out
 gpio mode $PIROEILDROIT_GPIO out 
 gpio mode $PIRNEZ_GPIO out 
 gpio mode $PIRDETECTEUR_GPIO in
+gpio write $PIRNEZ_GPIO 1
 say "Détecteur P I R en service..."
-/home/pi/jarvis/plugins/jarvis-plug-PIR/control-pir.sh &
+/home/pi/jarvis/plugins_installed/jarvis-plug-PIR/control-pir.sh &

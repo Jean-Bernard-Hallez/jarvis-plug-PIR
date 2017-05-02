@@ -11,8 +11,8 @@ MesurePIR="ON"
 
 
 if [[ "$MesurePIR" == "OFF" ]] ; then 
-varpir="$jv_dir/plugins/jarvis-plug-PIR/traitementPIR"
-varpirconfig="$jv_dir/plugins/jarvis-plug-PIR"
+varpir="$jv_dir/plugins_installed/jarvis-plug-PIR/traitementPIR"
+varpirconfig="$jv_dir/plugins_installed/jarvis-plug-PIR"
 
 DER_MesurePIR=`cat $varpir/mesurepir.txt | cut -d',' -f7`
 	if [[ "$DER_MesurePIR" == "ON" ]] ; then 
@@ -46,7 +46,10 @@ if [[ "$MesurePIR" == "ON" ]]; then
 
 Traitement_CalculDiffernceHetPIR # traitement des variables relevées
 
+if [ "$PIRHEUREHEURE" -gt "$PIRHDEBUTPARLER" ] && [ "$PIRHEUREHEURE" -lt "$PIRHFINPARLER" ]; then
+
 PIR_ACTION_TOUTES_LES_DIFF=$(( (`echo "$PIRHEUREMIN" |  sed  -e 's/^0//g'`) - (`echo "$DERPIRHEUREMIN" |  sed  -e 's/^0//g'`) ))
+
 PIR_ACTION_TOUTES_LES_DIFFH=$(( (`echo "$PIRHEUREHEURE" |  sed  -e 's/^0//g'`)  - (`echo "$DERPIRHEUREHEURE" |  sed  -e 's/^0//g'`) ))
 
 	if [[ "$PIR_ACTION_TOUTES_LES_DIFFH" == "0" ]]; then
@@ -61,20 +64,20 @@ PIR_ACTION_TOUTES_LES_DIFFH=$(( (`echo "$PIRHEUREHEURE" |  sed  -e 's/^0//g'`)  
 	Pir_FEUX_VERT="Ok"
 	fi
 fi
-
+fi
 
 
 ######################## # Ok j'ai le feux vert je continue:
 
 if [[ "$Pir_FEUX_VERT" == "Ok" ]]; then 
-varpir="$jv_dir/plugins/jarvis-plug-PIR/traitementPIR"
-varpirconfig="$jv_dir/plugins/jarvis-plug-PIR"
+varpir="$jv_dir/plugins_installed/jarvis-plug-PIR/traitementPIR"
+varpirconfig="$jv_dir/plugins_installed/jarvis-plug-PIR"
 DER_MesurePIR=`cat $varpir/mesurepir.txt | cut -d',' -f7`
 
 
 if [[ "$Pir_FEUX_VERT" == "Ok" ]] ; then 
-varpir="$jv_dir/plugins/jarvis-plug-PIR/traitementPIR"
-varpirconfig="$jv_dir/plugins/jarvis-plug-PIR"
+varpir="$jv_dir/plugins_installed/jarvis-plug-PIR/traitementPIR"
+varpirconfig="$jv_dir/plugins_installed/jarvis-plug-PIR"
 PIR_ALARME_ETAT=`cat $varpir/ALARME.txt`
 	if [[ "PIR_ALARME_ETAT" == "ON" ]] ; then 
 	echo "******************** Alarme Domicile en Marche ********************"
@@ -93,18 +96,13 @@ Traitement_Yeux_Nuit
 # ----------------------------------------------------------------------------------------------------------
 # ----------------------------------------------------------------------------------------------------------
 
-# #### #   C'est le jour je me réveille en douceur... j'allume mes leds
-	if [ "$DERPIRHEUREHEURE" = "0" ]; then
-	$PIRNEZ 1
-	fi
 
-
-# #### #   Puis mes porg commence que si l'heure actuelle > heure programmé pour parler = PIRHDEBUTPARLER
+# #### #   Mes porg commence que si l'heure actuelle > heure programmé pour parler = PIRHDEBUTPARLER
 
 	if [ "$DERPIRHEUREHEURE" -gt "$PIRHDEBUTPARLER" ] && [ "$DERPIRHEUREHEURE" -lt "$PIRHFINPARLER" ]; then
-
-	varpir="$jv_dir/plugins/jarvis-plug-PIR/traitementPIR"
-	varpirconfig="$jv_dir/plugins/jarvis-plug-PIR"
+ $PIRNEZ 1
+	varpir="$jv_dir/plugins_installed/jarvis-plug-PIR/traitementPIR"
+	varpirconfig="$jv_dir/plugins_installed/jarvis-plug-PIR"
 	PIRCONFIGAUTOTAL=$(grep -c 'PIR_DIRE_ORDER=' $varpirconfig/config.sh)
 	PIRCONFIGAUTOTAL=$(($PIRCONFIGAUTOTAL + 1 ))
 	ProgrammePIRNum="1"
@@ -115,7 +113,8 @@ Traitement_Yeux_Nuit
 		# pirrelevedonne_Go # Première fois donc je lis
 		# fi
 	
-
+# ----------------------------------------------------------------------------------------------------------
+# ----------------------------------------------------------------------------------------------------------
 	# traitement test pir à 1
 	Traitement_Pi-A1
 
@@ -132,7 +131,7 @@ Traitement_Yeux_Nuit
 
 
 	# Traitement du fichier des programme du config
-	Traitement_Execution_programmes_du_fichier_config
+ 	Traitement_Execution_programmes_du_fichier_config
 # ----------------------------------------------------------------------------------------------------------
 # ----------------------------------------------------------------------------------------------------------
 # Fin j'enregistre heure du dernièr PIR à ON
@@ -143,9 +142,16 @@ echo "$PIRHEUREJOUR,$PIRHEUREMOI,$PIRHEUREHEURE,$PIRHEUREMIN,$PIR_NBREFOIS_LAOUP
 
 # Traitement_yeuxFin
 my_var=true
-# commands="$(jv_get_commands)"; jv_handle_order "LESYEUXOFF"
+# say " "; jv_handle_order "LESYEUXOFF"
 
-say " "; jv_handle_order "LESYEUXOFF"
+
+commands="$(jv_get_commands)"; jv_handle_order "LESYEUXOFF"
+# say $(jv_get_commands); jv_handle_order "LESYEUXOFF"
+# jv_handle_order "LESYEUXOFF"
+# say " "; jv_handle_order "LESYEUXOFF"
+# $PIROEILGAUCHE 0
+# $PIROEILDROIT 0
+
 fi
 # fi
 }
@@ -189,7 +195,7 @@ jv_success "* Je traite: $PIRtraitementpour"
 PIR_DIRE_REP_AQH_Compt_fichier="1"
 PIR_TTRAITEMENT_PIR_DIRE_REP_AQH
 PIRDIRE_REPAQH_OK=""
-
+if [ "$ProgrammePIRNum" = "$PIRCONFIGAUTOTAL" ]; then return; fi
 	done
 }
 
@@ -202,8 +208,8 @@ PIRDIRE_REPAQH_OKHeure_variable=`echo -n $PIRDIRE_REPAQH_OK_variable | grep ":" 
 PIRDIRE_REPAQH_OKMinutes_variable=`echo -n $PIRDIRE_REPAQH_OK_variable | grep ":" | cut -d: -f2`		# je récupère que minute
 
 # ### # echo "Pour le Programme $PIRtraitementpour, les heures total à gerer: $PIR_DIRE_REP_AQH_TOTAL_variable"
-# ### #   echo "Heure N° $PIR_DIRE_REP_AQH_Compt à: $PIRDIRE_REPAQH_OK_variable avec ici les Heure: $PIRDIRE_REPAQH_OKHeure_variable et les minutes: $PIRDIRE_REPAQH_OKMinutes_variable"
-# ### #  echo " "
+# ### # echo "Heure N° $PIR_DIRE_REP_AQH_Compt à: $PIRDIRE_REPAQH_OK_variable avec ici les Heure: $PIRDIRE_REPAQH_OKHeure_variable et les minutes: $PIRDIRE_REPAQH_OKMinutes_variable"
+# ### # echo " "
 
 # Arrêt compteur à la fin du total des heure inscrites dans variable:
 if [ "$PIR_DIRE_REP_AQH_Compt" -le "$PIR_DIRE_REP_AQH_TOTAL_variable" ]; then 
@@ -215,9 +221,14 @@ if [ "$PIR_DIRE_REP_AQH_Compt" -le "$PIR_DIRE_REP_AQH_TOTAL_variable" ]; then
 
 	# Oui c'est plus grand donc je lire maintenant dans fichier enregistré	
 	valireheurefichiernumerox		
+	
 	# jv_debug "Oui c'est plus grand donc si je regarde heure maintenant = $DERPIRHEUREHEURE > que heure du fichier $PIRDIRE_REPAQH_OKHeure_fichier"
-
 	PIR_DIRE_REP_AQH_Compt_fichier=$(($PIR_DIRE_REP_AQH_Compt_fichier + 1 ))
+	
+if test -z "$PIRDIRE_REPAQH_OKHeure_fichier"; then 
+PIRDIRE_REPAQH_OKHeure_fichier="0"
+fi
+	
 			if [ "$DERPIRHEUREHEURE" -ge "$PIRDIRE_REPAQH_OKHeure_fichier" ]; then # Est ce que heure maintenant > heure dans fichier
                         # oui l"heure est plus grande donc je vais vérifier si l'heure à traité est la même = que lheure du fichier
 			jv_debug "Oui c'est plus grand donc je lis le fichier enregistré:$PIRDIRE_REPAQH_OKHeure_fichier = heure variable:$PIRDIRE_REPAQH_OKHeure_variable  puis si heure variable 1ou0 --> $PIRDIRE_REPAQH_OKMinutes_1ou0_fichier"
@@ -228,6 +239,7 @@ if [ "$PIR_DIRE_REP_AQH_Compt" -le "$PIR_DIRE_REP_AQH_TOTAL_variable" ]; then
 				jv_debug "Oui c'est = à 0 je fais mon programme demandé dans le config"
 				# oui ce n'est pas encore lu donc Oui, j'exécute commande
                                 modif0ou1fichier_heure # je vais mettre un 1 ou 0 à la bonne heure puis j'excécute ma commande à traiter
+
 				pirrelevedonnerep_Go
 				# return
 				fi
@@ -261,7 +273,7 @@ pirrelevedonne_fichierexiste() {
 if [ -f "$varpir/$PIRtraitementpour.txt" ]; then
 # Oui il existe
 # Je vérifie si les heures correspondent
-Traitement_total_heure-config-correspond
+Traitement_total_heure_config_correspond
 REP_PROCHAIN_1OU0=`cat $varpir/$PIRtraitementpour.txt | cut -d',' -f1`     # 1=Fait  ou 0=Pas encore
 REP_PROCHAIN_JOUR=`cat $varpir/$PIRtraitementpour.txt | cut -d',' -f2` # Jour ou c'est fait
 PIRDIRE_REP1OU0=`cat $varpir/$PIRtraitementpour.txt | cut -d',' -f3` # Ai je répété le PIRDIRE_REPAQH ?
@@ -274,8 +286,7 @@ else
 REP_PROCHAINJOUR="$PIRHEUREJOUR"
 echo "Le fichier n'existe pas... je le créais"
 
-Traitement_total_heure-config # Je copie ce qu'il y a dans config dans fichier
-
+Traitement_total_heure_config # Je copie ce qu'il y a dans config dans fichier
 echo "0,$PIRHEUREJOUR,0,0,$PIRDIRE_REPAQH_OK" > $varpir/$PIRtraitementpour.txt 
 
 
@@ -291,7 +302,7 @@ REP_OPION="0"
 # ### PIRDIRE_REPAQH_OK_ENREG
 
 PIRDIRE_REPAQH_OK=""
-Traitement_total_heure-config
+Traitement_total_heure_config
 jv_warning "$PIRtraitementpour: C'est un nouveau jour... "
 # jv_warning "REP_PROCHAIN_1OU0=$REP_PROCHAIN_1OU0,PIRHEUREJOUR=$PIRHEUREJOUR,PIRDIRE_REP1OU0=$PIRDIRE_REP1OU0,REP_OPION=$REP_OPION,PIRDIRE_REPAQH_OK=$PIRDIRE_REPAQH_OK"
 echo "$REP_PROCHAIN_1OU0,$PIRHEUREJOUR,$PIRDIRE_REP1OU0,$REP_OPION,$PIRDIRE_REPAQH_OK" > $varpir/$PIRtraitementpour.txt 
@@ -421,8 +432,8 @@ PIR_NBREFOIS_LAOUPAS=`echo $(( $PIR_NBREFOIS_LAOUPAS + 1))`
 if [ `echo ${PIRHEUREHEURE:0:1}` = "0" ]; then PIRHEUREHEURE=`echo ${PIRHEUREHEURE:1:2}`; fi
 if [ `echo ${PIRHDEBUTPARLER:0:1}` = "0" ]; then PIRHDEBUTPARLER=`echo ${PIRHDEBUTPARLER:1:2}`; fi
 
-	varpir="$jv_dir/plugins/jarvis-plug-PIR/traitementPIR"
-	varpirconfig="$jv_dir/plugins/jarvis-plug-PIR"
+	varpir="$jv_dir/plugins_installed/jarvis-plug-PIR/traitementPIR"
+	varpirconfig="$jv_dir/plugins_installed/jarvis-plug-PIR"
 
 	if [ ! -d $varpir ]; then # est-ce que le répertoire existe ?
 	echo "----------je créer le répertoire----------"
@@ -433,7 +444,7 @@ if [ `echo ${PIRHDEBUTPARLER:0:1}` = "0" ]; then PIRHDEBUTPARLER=`echo ${PIRHDEB
 
 
 	if [ ! -f "$varpir/mesurepir.txt" ]; then # est-ce que le fichier existe ?
-	echo "$PIRHEUREJOUR,$PIRHEUREMOI,$PIRHEUREHEURE,$PIRHEUREMIN,$PIR_NBREFOIS_LAOUPAS,$MesurePIR,0" > $varpir//traitementPIR/mesurepir.txt 
+	echo "$PIRHEUREJOUR,$PIRHEUREMOI,$PIRHEUREHEURE,$PIRHEUREMIN,$PIR_NBREFOIS_LAOUPAS,$MesurePIR,0" > $varpir/mesurepir.txt 
 	fi
 
 # Dernière mesure relevée:
@@ -445,7 +456,11 @@ DERPIR_NBREFOIS_LAOUPAS=`cat $varpir/mesurepir.txt | cut -d',' -f5`
 DERPIR_MesurePIR=`cat $varpir/mesurepir.txt | cut -d',' -f6`
 DERPIR_OPTION_MESURE=`cat $varpir/mesurepir.txt | cut -d',' -f7`
 
+if [[ "$DERPIRHEUREHEURE" != "0" ]]; then
 if [ `echo ${DERPIRHEUREHEURE:0:1}` = "0" ]; then DERPIRHEUREHEURE=`echo ${DERPIRHEUREHEURE:1:2}`; fi
+else
+DERPIRHEUREHEURE="00"
+fi
 
 # Nouveau jour ?
 if [ "$PIRHEUREJOUR" -ne "$DERPIRHEUREJOUR" ]; then
@@ -493,7 +508,7 @@ fi
 #----------------------------------------------------------------------------
 
 Traitement_Yeux_Nuit() {
-if [ "$DERPIRHEUREHEURE" -ge "$PIRLUMIEREOFFNUIT" ]; then
+if [ "$PIRHEUREHEURE" -ge "$PIRLUMIEREOFFNUIT" ] && [ "$PIRHEUREHEURE" -lt "$PIRHDEBUTPARLER" ] ; then
 $PIRNEZ 0
 $PIROEILDROIT 0
 $PIROEILGAUCHE 0
@@ -520,7 +535,7 @@ PIRDIRE_REPAQH_OK_fichier1=`echo "$PIRDIRE_REPAQH_OK_fichier1 1" | sed -e "s/ //
 PIRDIRE_REPAQH_OK_ENREG=`echo "$PIRDIRE_REPAQH_OK_ENREG" | sed -e "s/$PIRDIRE_REPAQH_OK_fichier/$PIRDIRE_REPAQH_OK_fichier1/g"`
 }
 
-Traitement_total_heure-config() {
+Traitement_total_heure_config() {
 if test -z "$PIRDIRE_REPAQH"; then
 return
 else
@@ -529,7 +544,7 @@ PIR_DIRE_REP_AQH_TOTAL=`echo -n "$PIRDIRE_REPAQH" | grep ":" | wc -w`
 PIR_DIRE_REP_AQH_Compt_heure_config=$(($PIR_DIRE_REP_AQH_Compt_heure_config + 1 ))
 	if [ "$PIR_DIRE_REP_AQH_Compt_heure_config" -le "$PIR_DIRE_REP_AQH_TOTAL" ]; then 
 	PIRDIRE_REPAQH_OK="$PIRDIRE_REPAQH_OK `echo "$PIRDIRE_REPAQH" | grep ":" | cut -d' ' -f $PIR_DIRE_REP_AQH_Compt_heure_config | sed -e "s/ //g"`,0"
-	Traitement_total_heure-config
+	Traitement_total_heure_config
 	fi
 fi
 
@@ -537,7 +552,7 @@ fi
 
 }
 
-Traitement_total_heure-config-correspond() {
+Traitement_total_heure_config_correspond() {
 PIR_DIRE_REP_AQH_TOTAL=`echo -n "$PIRDIRE_REPAQH" | grep ":" | wc -w` # Nombre d'heure total à vérifier
 PIR_DIRE_REP_AQH_Compt_heure_config=$(($PIR_DIRE_REP_AQH_Compt_heure_config + 1 ))
 if [ "$PIR_DIRE_REP_AQH_Compt_heure_config" -le "$PIR_DIRE_REP_AQH_TOTAL" ]; then  # tan que c'est plus petit que le nombre d"heure total je boucle
@@ -545,12 +560,12 @@ if [ "$PIR_DIRE_REP_AQH_Compt_heure_config" -le "$PIR_DIRE_REP_AQH_TOTAL" ]; the
 PIRDIRE_REPAQH_OK=`echo "$PIRDIRE_REPAQH" | grep ":" | cut -d' ' -f$PIR_DIRE_REP_AQH_Compt_heure_config | sed -e "s/ //g"` # = heure du config
 PIRDIRE_REPAQH_OK_FICHIEROK=`cat $varpir/$PIRtraitementpour.txt | cut -d',' -f5- | sed -e "s/,0//g" |  sed -e "s/,1//g" | cut -d' ' -f$(($PIR_DIRE_REP_AQH_Compt_heure_config +1 ))`   # = heure du fichier
 	if [ "$PIRDIRE_REPAQH_OK" = "$PIRDIRE_REPAQH_OK_FICHIEROK" ]; then
-	Traitement_total_heure-config-correspond
+	Traitement_total_heure_config_correspond
 	else
 	sudo rm "$varpir/$PIRtraitementpour.txt"
 	PIR_DIRE_REP_AQH_Compt_heure_config=""
 	PIRDIRE_REPAQH_OK=""
-	Traitement_total_heure-config
+	Traitement_total_heure_config
 	echo "0,$PIRHEUREJOUR,0,0,$PIRDIRE_REPAQH_OK" > $varpir/$PIRtraitementpour.txt 
 	return
 	fi
@@ -607,8 +622,7 @@ jv_debug "Heure dernière mise en marche PIR à $DERPIRHEUREHEURE heure $DERPIRH
 
 
 # ---------------------- Le même jours alrme ok -----------------------
-if [ $DERPIRHEUREJOUR = $PIRHEUREJOUR ]
-then
+if [ $DERPIRHEUREJOUR = $PIRHEUREJOUR ]; then
 	if [ $DERPIRHEUREHEURE -le $matin ]  # Si ALARME < MATIN = je suis bien sortie la matin 
 	then
 	sortie="... Vous vous êtes promenée ce matin ? c'est très  bien pour la forme..."
@@ -632,6 +646,9 @@ then
 
 # jv_debug "message de sortie: $sortie"
 fi
+
+
+
 # ----------------------------------------------------------
 
 # ---------------------- Si la veille l'alarme pasen marche 1 seul fois ! -----------------------
@@ -707,13 +724,15 @@ fi
 phrase="Comment c'est passée  "
 
 # jv_debug "Elle va dire:"
-say "$dire"
+
+if test -n "$dire"; then say "$dire"; fi
+
 if test -z $PIR_OPTION_MESURE; then PIR_OPTION_MESURE=$DERPIR_OPTION_MESURE; fi
 }
 
 DERPIR_RELEVEE() {
-varpir="$jv_dir/plugins/jarvis-plug-PIR/traitementPIR"
-varpirconfig="$jv_dir/plugins/jarvis-plug-PIR"
+varpir="$jv_dir/plugins_installed/jarvis-plug-PIR/traitementPIR"
+varpirconfig="$jv_dir/plugins_installed/jarvis-plug-PIR"
 DERPIRHEUREJOUR=`cat $varpir/mesurepir.txt | cut -d',' -f1`
 DERPIRHEUREMOI=`cat $varpir/mesurepir.txt | cut -d',' -f2`
 DERPIRHEUREHEURE=`cat $varpir/mesurepir.txt | cut -d',' -f3`

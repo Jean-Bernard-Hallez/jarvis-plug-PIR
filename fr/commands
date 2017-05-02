@@ -4,6 +4,5 @@ MESUREPIR==MesurePIR
 *NEZ*== [ `gpio read 3` = 0 ] && (say "Ne me prend pas pour un clown ! "; gpio write 3 1) || (say "Ok je m'efface"; gpio write 3 0)
 *OUV*ES*EUX*==say "Ha je te voix mieux comme ça"; gpio write 2 1; gpio write 0 1
 *FER*ES*EUX*==say "Je vais m'endormir..."; gpio write 2 0; gpio write 0 0
-LESYEUXOFF==$PIROEILGAUCHE 0;$PIROEILDROIT 0
+LESYEUXOFF==$PIROEILGAUCHE 0; $PIROEILDROIT 0
 MESURE*PIR*==jv_pg_ct_quefaitceci
-

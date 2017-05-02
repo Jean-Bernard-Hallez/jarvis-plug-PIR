@@ -11,6 +11,7 @@ For multi-language plugin:
 -->
 ## Description
 
+02/05/17 reprogrammation suite modif de jarvis (plugins_installed)
 28/03/2017 Fonctionnement du PIR indépendamment comme Alarme avec domoticz Par exemple / Meilleure stabilité du fonctionnement
 Si vous avez la même configuration que moi un jarvis avec des leds et un detecteur de mouvement... voir ici:
 https://github.com/Jean-Bernard-Hallez/jarvis-testjb/blob/master/Jarvis%20de%20JB-2.pdf
