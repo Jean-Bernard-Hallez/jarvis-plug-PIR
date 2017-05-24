@@ -130,6 +130,7 @@ Traitement_yeux
 	varpir="$jv_dir/plugins_installed/jarvis-plug-PIR/traitementPIR"
 	varpirconfig="$jv_dir/plugins_installed/jarvis-plug-PIR"
 	PIRCONFIGAUTOTAL=$(grep -c 'PIR_DIRE_ORDER=' $varpirconfig/config.sh)
+	PIRCONFIGAUTOTALMISEAJOUR=$(grep -c '##' $varpirconfig/config.sh)
 	PIRCONFIGAUTOTAL=$(($PIRCONFIGAUTOTAL + 1 ))
 	ProgrammePIRNum="1"
 
@@ -138,7 +139,14 @@ Traitement_yeux
 		# echo "zzzz"
 		# pirrelevedonne_Go # Première fois donc je lis
 		# fi
-	
+	if [[ "$PIRCONFIGAUTOTALMISEAJOUR" -gt "3" ]]; then
+	say "Attention vous avez fais des mise à jours et dans le fichier config.sh il faut supprimer les doubles dièses..." 
+	say "je répète..."
+	say "Attention vous avez fais des mise à jours et dans le fichier config.sh il faut supprimer les doubles dièses..." 
+	say "le programme va beuguer..."
+	exit
+	fi
+
 # ----------------------------------------------------------------------------------------------------------
 # ----------------------------------------------------------------------------------------------------------
 	# traitement test pir à 1
@@ -203,6 +211,7 @@ fi
 
 Traitement_Execution_programmes_du_fichier_config() {
 # #### # Lecture de toutes les variable dans config
+
 
 	while test $ProgrammePIRNum != $PIRCONFIGAUTOTAL
 	do
