@@ -22,7 +22,7 @@ PIRACHAQUEDETECTION_SAY=""
 # 1)
 PIR_traitement_pour="reveil"
 PIR_DIRE_DEBUT="C'est bien on se reveil !"
-PIR_DIRE_ORDER="température chambre puis météo puis fête à qui puis prochainevenement puis une citation" # Que doit t-il énoncé  ?
+PIR_DIRE_ORDER="température chambre +  météo puis fête à qui + prochainevenement + une citation" # Que doit t-il énoncé  ?
 PIR_DIRE_FIN="Voilà bonne journée tout le monde"
 PIR_DIRE_REP_AQH="08:00"
 
@@ -51,7 +51,7 @@ PIR_DIRE_REP_AQH="11:00 13:00 17:00"
 # 5)
 PIR_traitement_pour="pleinelune"
 PIR_DIRE_DEBUT=""
-PIR_DIRE_ORDER="prochaine pleine lune puis température chambre" # Que doit t-il énoncé  ?
+PIR_DIRE_ORDER="prochaine pleine lune + température chambre" # Que doit t-il énoncé  ?
 PIR_DIRE_FIN=""
 PIR_DIRE_REP_AQH="20:35"
 

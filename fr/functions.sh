@@ -1,6 +1,32 @@
 #!/bin/sh
 
+jv_pg_ct_MesurePIR_dodo() {
+varpirconfigdodo="$jv_dir/plugins_installed/jarvis-plug-PIR/on-off.txt"
+echo "dodo" > $varpirconfigdodo
+say "Prononcer reveilles toi pour me réactiver... Mesure Pire Off"
+}
+
+jv_pg_ct_MesurePIR_reveil() {
+varpirconfigdodo="$jv_dir/plugins_installed/jarvis-plug-PIR/on-off.txt"
+echo "" > $varpirconfigdodo
+say "Voilà je suis bien réveillé Mesure Pire On"
+}
+
 MesurePIR() {
+
+varpirconfigdodo="$jv_dir/plugins_installed/jarvis-plug-PIR/on-off.txt"
+varpir="$jv_dir/plugins_installed/jarvis-plug-PIR/traitementPIR"
+MesurePIR_jr_dodo=`cat $varpir/mesurepir.txt | cut -d',' -f1`
+PIRHEUREJOUR_DODO=`date +%d` 
+
+if [[ "$PIRHEUREJOUR_DODO" != "$MesurePIR_jr_dodo" ]]; then
+say "ça fait un jour que je suis endormi... je me réveille..."
+echo "" > $varpirconfigdodo
+fi
+
+MesurePIR_reveil=`cat $varpirconfigdodo`
+
+if test -z "$MesurePIR_reveil"; then 
 PIROEILGAUCHE="gpio write $PIROEILGAUCHE_GPIO" # GPIO Oeil Gauche
 PIROEILDROIT="gpio write $PIROEILDROIT_GPIO"  # GPIO Oeil Droit
 PIRNEZ="gpio write $PIRNEZ_GPIO"        # GPIO Nez
@@ -45,8 +71,7 @@ fi
 if [[ "$MesurePIR" == "ON" ]]; then 
 
 Traitement_CalculDiffernceHetPIR # traitement des variables relevées
-
-if [ "$PIRHEUREHEURE" -gt "$PIRHDEBUTPARLER" ] && [ "$PIRHEUREHEURE" -lt "$PIRHFINPARLER" ]; then
+    if [ "$PIRHEUREHEURE" -gt "$PIRHDEBUTPARLER" ] && [ "$PIRHEUREHEURE" -le "$PIRHFINPARLER" ]; then
 
 PIR_ACTION_TOUTES_LES_DIFF=$(( (`echo "$PIRHEUREMIN" |  sed  -e 's/^0//g'`) - (`echo "$DERPIRHEUREMIN" |  sed  -e 's/^0//g'`) ))
 
@@ -63,6 +88,9 @@ PIR_ACTION_TOUTES_LES_DIFFH=$(( (`echo "$PIRHEUREHEURE" |  sed  -e 's/^0//g'`)  
 	else
 	Pir_FEUX_VERT="Ok"
 	fi
+
+else
+Traitement_Yeux_Nuit
 fi
 fi
 
@@ -86,11 +114,9 @@ PIR_ALARME_ETAT=`cat $varpir/ALARME.txt`
 	fi
 fi
 
-
-
 Traitement_yeux
 
-Traitement_Yeux_Nuit
+
 
 # #### #   je débute le traitement de tous les programmes à faire:
 # ----------------------------------------------------------------------------------------------------------
@@ -131,7 +157,7 @@ Traitement_Yeux_Nuit
 
 
 	# Traitement du fichier des programme du config
- 	Traitement_Execution_programmes_du_fichier_config
+ 	 Traitement_Execution_programmes_du_fichier_config
 # ----------------------------------------------------------------------------------------------------------
 # ----------------------------------------------------------------------------------------------------------
 # Fin j'enregistre heure du dernièr PIR à ON
@@ -153,7 +179,10 @@ commands="$(jv_get_commands)"; jv_handle_order "LESYEUXOFF"
 # $PIROEILDROIT 0
 
 fi
-# fi
+else
+jv_warning "Tu m'as demandé de m'endormir... jusqu'à demain je suis inactif... mais tu peux prononcer reveilles-toi pour me reveiller..."
+fi
+
 }
 
 Traitement_Pi-A1() {
@@ -173,8 +202,8 @@ fi
 }
 
 Traitement_Execution_programmes_du_fichier_config() {
-
 # #### # Lecture de toutes les variable dans config
+
 	while test $ProgrammePIRNum != $PIRCONFIGAUTOTAL
 	do
 
@@ -185,7 +214,6 @@ Traitement_Execution_programmes_du_fichier_config() {
 	PIRDIRE_REPAQH=$(grep 'PIR_DIRE_REP_AQH=' $varpirconfig/config.sh | sed -n $ProgrammePIRNum\p | sed -e "s/PIR_DIRE_REP_AQH=//g" | sed -e 's/"//g' | cut -d ',' -f 1)          # Les heures ou de je dois je faire
 	if [ "$PIRDIRE_REPAQH" = "" ]; then PIRDIRE_REPAQH="24"; fi
 
-	ProgrammePIRNum=$(($ProgrammePIRNum + 1))
 	pirrelevedonne_fichierexiste # est-ce que le fichier existe ?
 
 
@@ -196,12 +224,12 @@ PIR_DIRE_REP_AQH_Compt_fichier="1"
 PIR_TTRAITEMENT_PIR_DIRE_REP_AQH
 PIRDIRE_REPAQH_OK=""
 if [ "$ProgrammePIRNum" = "$PIRCONFIGAUTOTAL" ]; then return; fi
-	done
+ProgrammePIRNum=$(($ProgrammePIRNum + 1))	
+done
 }
 
 PIR_TTRAITEMENT_PIR_DIRE_REP_AQH() {
 # Lecture variable config
-
 PIR_DIRE_REP_AQH_TOTAL_variable=`echo -n $PIRDIRE_REPAQH | grep ":" | wc -w` 			 # combien d'heure à gerer au total ?
 PIRDIRE_REPAQH_OK_variable=`echo -n $PIRDIRE_REPAQH | grep ":" | cut -d' ' -f$PIR_DIRE_REP_AQH_Compt | sed -e "s/ //g"` # je récupère heure entière
 PIRDIRE_REPAQH_OKHeure_variable=`echo -n $PIRDIRE_REPAQH_OK_variable | grep ":" | cut -d: -f1`		# je recupère que Heure
@@ -239,7 +267,6 @@ fi
 				jv_debug "Oui c'est = à 0 je fais mon programme demandé dans le config"
 				# oui ce n'est pas encore lu donc Oui, j'exécute commande
                                 modif0ou1fichier_heure # je vais mettre un 1 ou 0 à la bonne heure puis j'excécute ma commande à traiter
-
 				pirrelevedonnerep_Go
 				# return
 				fi
@@ -306,6 +333,7 @@ Traitement_total_heure_config
 jv_warning "$PIRtraitementpour: C'est un nouveau jour... "
 # jv_warning "REP_PROCHAIN_1OU0=$REP_PROCHAIN_1OU0,PIRHEUREJOUR=$PIRHEUREJOUR,PIRDIRE_REP1OU0=$PIRDIRE_REP1OU0,REP_OPION=$REP_OPION,PIRDIRE_REPAQH_OK=$PIRDIRE_REPAQH_OK"
 echo "$REP_PROCHAIN_1OU0,$PIRHEUREJOUR,$PIRDIRE_REP1OU0,$REP_OPION,$PIRDIRE_REPAQH_OK" > $varpir/$PIRtraitementpour.txt 
+
 fi
 
 }
@@ -313,6 +341,16 @@ fi
 pirrelevedonne_Go() {
 # Nouveau a faire si condition réuni
 say "$PIRDIRE_DEBUT"
+jv_warning "--XX---jv_handle_order PIRDIRE_ORDER=$PIRDIRE_ORDER---XX--"
+
+PIRDIRE_ORDER_TT=`echo "$PIR_DIRE_ORDER" | grep -o "/" | wc -w`
+PIRDIRE_ORDER_TTComp="1"
+while $PIRDIRE_ORDER_TTComp != $PIRDIRE_ORDER_TT
+do
+PIRDIRE_ORDER_TT_dit="$PIR_DIRE_ORDER" | cut -d"/" -f$PIRDIRE_ORDER_TTComp
+PIRDIRE_ORDER_TTComp=$(( $PIRDIRE_ORDER_TTComp + 1 ))
+done
+exit
 jv_handle_order "$PIRDIRE_ORDER"
 say "$PIRDIRE_FIN"
 REP_PROCHAIN_1OU0=$(($REP_PROCHAIN_1OU0 + 1))
@@ -325,7 +363,15 @@ echo "$REP_PROCHAIN_1OU0,$PIRHEUREJOUR,$PIRDIRE_REP1OU0,$REP_OPION,$PIRDIRE_REPA
 pirrelevedonnerep_Go() {
 # Nouveau a faire si condition réuni
 say "$PIRDIRE_DEBUT"
-jv_handle_order "$PIRDIRE_ORDER"
+PIRDIRE_ORDER_TT=$(( `echo "$PIRDIRE_ORDER" | grep -o "+" | wc -w` + 1 )) 
+PIRDIRE_ORDER_TTComp="1"
+jv_warning "-----jv_handle_order PIRDIRE_ORDER=$PIRDIRE_ORDER-----"
+while test $PIRDIRE_ORDER_TTComp != $PIRDIRE_ORDER_TT
+do
+PIRDIRE_ORDER_TT_dit=`echo "$PIRDIRE_ORDER" | cut -d"+" -f$PIRDIRE_ORDER_TTComp`
+jv_handle_order "$PIRDIRE_ORDER_TT_dit"
+PIRDIRE_ORDER_TTComp=$(( $PIRDIRE_ORDER_TTComp + 1 ))
+done
 say "$PIRDIRE_FIN"
 PIRDIRE_REP1OU0=$(($PIRDIRE_REP1OU0 + 1))
 if [ "$PIRDIRE_REP1OU0" -ge "1" ]; then PIRDIRE_REP1OU0="1"; fi
@@ -489,7 +535,7 @@ if [ "$DERPIRHEUREHEURE" -lt "$PIRLUMIEREOFFNUIT" ]; then
 $PIRNEZ 1; $PIROEILDROIT 1; $PIROEILGAUCHE 1
 
 
-	if [ "$DERPIRHEUREHEURE" -gt "$PIRHDEBUTPARLER" ]; then 
+	if [ "$DERPIRHEUREHEURE" -ge "$PIRHDEBUTPARLER" ]; then 
 
 		if [ "$DERPIRHEUREHEURE" -lt "$PIRHFINPARLER" ]; then 
 
@@ -508,7 +554,8 @@ fi
 #----------------------------------------------------------------------------
 
 Traitement_Yeux_Nuit() {
-if [ "$PIRHEUREHEURE" -ge "$PIRLUMIEREOFFNUIT" ] && [ "$PIRHEUREHEURE" -lt "$PIRHDEBUTPARLER" ] ; then
+if [ "$PIRHEUREHEURE" -ge "$PIRLUMIEREOFFNUIT" ] || [ "$PIRHEUREHEURE" -le "$PIRHDEBUTPARLER" ] ; then
+
 $PIRNEZ 0
 $PIROEILDROIT 0
 $PIROEILGAUCHE 0
@@ -526,7 +573,7 @@ fi
 modif0ou1fichier_heure() {      # je vais mettre un 1 ou 0 à la bonne heure
 PIRDIRE_REPAQH_OKMinutes_1ou0_fichier="1"
 PIR_DIRE_REP_AQH_Compt=$(($PIR_DIRE_REP_AQH_Compt + 1 ))
-PIRDIRE_REPAQH_OK_LIGNE=`echo -n $PIRDIRE_REPAQH  | grep -n '$PIRtraitementpour'   fichier_à_lire | cut -d: -f1`
+PIRDIRE_REPAQH_OK_LIGNE=`echo -n $PIRDIRE_REPAQH  | grep -n '$PIRtraitementpour' | cut -d: -f1`
 PIRDIRE_REPAQH_OK=`echo -n $PIRDIRE_REPAQH | grep ":" | cut -d' ' -f$PIR_DIRE_REP_AQH_Compt | sed -e "s/ //g"`
 # echo "Je vais modifier le 1ou0 à 1 pour $PIRDIRE_REPAQH_OK"
 # Je dois remplacer l"heure ou ca correspond dans fichier par un 1

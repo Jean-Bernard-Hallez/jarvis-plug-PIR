@@ -10,9 +10,10 @@ For multi-language plugin:
 - optionally write the Description / Usage sections in several languages
 -->
 ## Description
-
+24/05/17 si il y a plusieurs plugins à excécuter insérer un + entre chaque demande dans le config.sh
+	 possibilité de lui dire de dormir... il se réactive seul le lendemain matin on peut aussi le reveiller... (utile quand on bidouille Jarvis)
 02/05/17 reprogrammation suite modif de jarvis (plugins_installed)
-28/03/2017 Fonctionnement du PIR indépendamment comme Alarme avec domoticz Par exemple / Meilleure stabilité du fonctionnement
+28/03/17 Fonctionnement du PIR indépendamment comme Alarme avec domoticz Par exemple / Meilleure stabilité du fonctionnement
 Si vous avez la même configuration que moi un jarvis avec des leds et un detecteur de mouvement... voir ici:
 https://github.com/Jean-Bernard-Hallez/jarvis-testjb/blob/master/Jarvis%20de%20JB-2.pdf
 
@@ -20,7 +21,6 @@ https://github.com/Jean-Bernard-Hallez/jarvis-testjb/blob/master/Jarvis%20de%20J
 ## Languages
 
 * Français
-
 
 ## Usage
 
