@@ -140,9 +140,11 @@ Traitement_yeux
 		# pirrelevedonne_Go # Première fois donc je lis
 		# fi
 	if [[ "$PIRCONFIGAUTOTALMISEAJOUR" -gt "3" ]]; then
-	say "Attention vous avez fais des mise à jours et dans le fichier config.sh il faut supprimer les doubles dièses..." 
+	say "Attention vous avez fais des mise à jours dans le fichier"
+	say "config.sh de mesure pire point S H"
+	say "il faut supprimer les doubles dièses..." 
 	say "je répète..."
-	say "Attention vous avez fais des mise à jours et dans le fichier config.sh il faut supprimer les doubles dièses..." 
+	say "Attention vous avez fais des mise à jours dans le fichier config.sh de mesure pire point S H il faut supprimer les doubles dièses..." 
 	say "le programme va beuguer..."
 	exit
 	fi
