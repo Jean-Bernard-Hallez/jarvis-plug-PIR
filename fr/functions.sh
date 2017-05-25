@@ -361,7 +361,6 @@ do
 PIRDIRE_ORDER_TT_dit="$PIR_DIRE_ORDER" | cut -d"/" -f$PIRDIRE_ORDER_TTComp
 PIRDIRE_ORDER_TTComp=$(( $PIRDIRE_ORDER_TTComp + 1 ))
 done
-exit
 jv_handle_order "$PIRDIRE_ORDER"
 say "$PIRDIRE_FIN"
 REP_PROCHAIN_1OU0=$(($REP_PROCHAIN_1OU0 + 1))
@@ -377,12 +376,16 @@ say "$PIRDIRE_DEBUT"
 PIRDIRE_ORDER_TT=$(( `echo "$PIRDIRE_ORDER" | grep -o "+" | wc -w` + 1 )) 
 PIRDIRE_ORDER_TTComp="1"
 jv_warning "-----jv_handle_order PIRDIRE_ORDER=$PIRDIRE_ORDER-----"
-while test $PIRDIRE_ORDER_TTComp != $PIRDIRE_ORDER_TT
-do
-PIRDIRE_ORDER_TT_dit=`echo "$PIRDIRE_ORDER" | cut -d"+" -f$PIRDIRE_ORDER_TTComp`
-jv_handle_order "$PIRDIRE_ORDER_TT_dit"
-PIRDIRE_ORDER_TTComp=$(( $PIRDIRE_ORDER_TTComp + 1 ))
-done
+	if [[ "$PIRDIRE_ORDER" =~ "+" ]]; then
+	while test $PIRDIRE_ORDER_TTComp != $PIRDIRE_ORDER_TT
+	do
+	PIRDIRE_ORDER_TT_dit=`echo "$PIRDIRE_ORDER" | cut -d"+" -f$PIRDIRE_ORDER_TTComp`
+	jv_handle_order "$PIRDIRE_ORDER_TT_dit"
+	PIRDIRE_ORDER_TTComp=$(( $PIRDIRE_ORDER_TTComp + 1 ))
+	done
+	else
+	jv_handle_order "$PIRDIRE_ORDER"
+	fi
 say "$PIRDIRE_FIN"
 PIRDIRE_REP1OU0=$(($PIRDIRE_REP1OU0 + 1))
 if [ "$PIRDIRE_REP1OU0" -ge "1" ]; then PIRDIRE_REP1OU0="1"; fi
