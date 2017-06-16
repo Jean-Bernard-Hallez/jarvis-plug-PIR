@@ -3,8 +3,8 @@
 
 
 if [ "$1" == "ON" ]; then
-varpir="/home/pi/jarvis/plugins/jarvis-plug-PIR/traitementPIR"
-varpirconfig="/home/pi/jarvis/plugins/jarvis-plug-PIR/config.sh"
+varpir="/home/pi/jarvis/plugins_installed/jarvis-plug-PIR/traitementPIR"
+varpirconfig="/home/pi/jarvis/plugins_installed/jarvis-plug-PIR/config.sh"
 /home/pi/jarvis/jarvis.sh -s "Alarme en marche"
 /home/pi/jarvis/jarvis.sh -x "Allume virtuel_sensor"
 
@@ -15,8 +15,8 @@ return
 fi
 
 if [ "$1" == "OFF" ]; then
-varpir="/plugins/jarvis-plug-PIR/traitementPIR"
-varpirconfig="/plugins/jarvis-plug-PIR/config.sh"
+varpir="/plugins_installed/jarvis-plug-PIR/traitementPIR"
+varpirconfig="/plugins_installed/jarvis-plug-PIR/config.sh"
 /home/pi/jarvis/jarvis.sh -s "Arrêt de l'alarme"
 /home/pi/jarvis/jarvis.sh -x "Eteint virtuel_sensor"
 
