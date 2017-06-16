@@ -274,7 +274,7 @@ PIRDIRE_REPAQH_OKMinutes_variable=`echo -n $PIRDIRE_REPAQH_OK_variable | grep ":
 if [ "$PIR_DIRE_REP_AQH_Compt" -le "$PIR_DIRE_REP_AQH_TOTAL_variable" ]; then 
 
 	if [[ "$PIRRETOURCONSOLE" == "ON" ]]; then
-	jv_info "$PIR_DIRE_REP_AQH_TOTAL_variable haure à traité, N°$PIR_DIRE_REP_AQH_Compt_fichier Si Heure de maintenant: $DERPIRHEUREHEURE > Heure enregistré dans le config: $PIRDIRE_REPAQH_OKHeure_variable"
+	jv_info "$PIR_DIRE_REP_AQH_TOTAL_variable heure à traiter, N°$PIR_DIRE_REP_AQH_Compt_fichier Si Heure de maintenant: $DERPIRHEUREHEURE > Heure enregistrée dans le config: $PIRDIRE_REPAQH_OKHeure_variable"
 	fi
 	# TEST: Heure de maintenant est > heure enregistré dans le config ? 
 	if [ "$DERPIRHEUREHEURE" -ge "$PIRDIRE_REPAQH_OKHeure_variable" ]; then 
@@ -290,7 +290,7 @@ PIRDIRE_REPAQH_OKHeure_fichier="0"
 fi
 	
 			if [ "$DERPIRHEUREHEURE" -ge "$PIRDIRE_REPAQH_OKHeure_fichier" ]; then # Est ce que heure maintenant > heure dans fichier
-                        # oui l"heure est plus grande donc je vais vérifier si l'heure à traité est la même = que lheure du fichier
+                        # oui l"heure est plus grande donc je vais vérifier si l'heure à traiter est la même = que lheure du fichier
 			if [[ "$PIRRETOURCONSOLE" == "ON" ]]; then
 			jv_debug "Oui c'est plus grand donc je lis le fichier enregistré:$PIRDIRE_REPAQH_OKHeure_fichier = heure variable:$PIRDIRE_REPAQH_OKHeure_variable  puis si heure variable 1ou0 --> $PIRDIRE_REPAQH_OKMinutes_1ou0_fichier"
 			fi
