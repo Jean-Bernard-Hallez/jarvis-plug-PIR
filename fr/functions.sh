@@ -10,8 +10,14 @@ echo "ON" > $varpirconfigdodo
 say "Voilà je suis bien réveillé Mesure Pire On"
 }
 
-MesurePIR() {
 
+jv_pg_ct_quatuamedire() {
+say "Ce que je peux te dire:"
+MesurePIR
+}
+
+MesurePIR() {
+# PIRINSTALLE un pir est instllé ? Oui = ON non = Off
 if [ ! -e "/home/pi/jarvis/plugins_installed/jarvis-plug-PIR/PIRRETOURCONSOLE.txt" ]; then 
 echo "ON" > /home/pi/jarvis/plugins_installed/jarvis-plug-PIR/PIRRETOURCONSOLE.txt
 fi
@@ -77,8 +83,8 @@ fi
 
 
 if [[ "$MesurePIR" == "ON" ]]; then 
-
 Traitement_CalculDiffernceHetPIR # traitement des variables relevées
+if [[ "$PIRINSTALLE" == "ON" ]]; then 
     if [ "$PIRHEUREHEURE" -gt "$PIRHDEBUTPARLER" ] && [ "$PIRHEUREHEURE" -le "$PIRHFINPARLER" ]; then
 
 PIR_ACTION_TOUTES_LES_DIFF=$(( (`echo "$PIRHEUREMIN" |  sed  -e 's/^0//g'`) - (`echo "$DERPIRHEUREMIN" |  sed  -e 's/^0//g'`) ))
@@ -99,11 +105,13 @@ PIR_ACTION_TOUTES_LES_DIFFH=$(( (`echo "$PIRHEUREHEURE" |  sed  -e 's/^0//g'`)  
 	Pir_FEUX_VERT="Ok"
 	fi
 
+ else
+ Traitement_Yeux_Nuit
+ fi
 else
-Traitement_Yeux_Nuit
+Pir_FEUX_VERT="Ok"
 fi
 fi
-
 
 ######################## # Ok j'ai le feux vert je continue:
 
@@ -170,16 +178,21 @@ Traitement_yeux
 	Traitement_Pi-A1
 
 	# Traitement pour : "Prochain pour simplement dire bonjour de temps en temps"
+	if [[ "$PIRINSTALLE" == "ON" ]]; then 
 	Traitement_bonjour
+	fi
 
 
 	# Traitement pour : "Suis-je sortie de la maison ? "
+	if [[ "$PIRINSTALLE" == "ON" ]]; then 
 	regardedanslajournée
-
-	# Traitement pour : "Dire si JB est souvent devant son pc ou pas"
-	Traitement_Tuessouventlaoupas 
 	fi
 
+	# Traitement pour : "Dire si JB est souvent devant son pc ou pas"
+	if [[ "$PIRINSTALLE" == "ON" ]]; then 
+	Traitement_Tuessouventlaoupas 
+	fi
+	fi
 
 	# Traitement du fichier des programme du config
  	 Traitement_Execution_programmes_du_fichier_config

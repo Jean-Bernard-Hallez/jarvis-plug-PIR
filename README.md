@@ -26,6 +26,7 @@ https://github.com/Jean-Bernard-Hallez/jarvis-testjb/blob/master/Jarvis%20de%20J
 
 ```
 Vous pourrez alors configurer vous même ceci qui est l'exemple du mien:
+
 PIROEILGAUCHE_GPIO="0"			 # GPIO Oeil Gauche
 PIROEILDROIT_GPIO="2" 			 # GPIO Oeil Droit
 PIRNEZ_GPIO="3"       			 # GPIO Nez
