@@ -5,11 +5,16 @@ gpio mode $PIRNEZ_GPIO out
 gpio mode $PIRDETECTEUR_GPIO in
 gpio write $PIRNEZ_GPIO 1
 if [ "$PIRRETOURCONSOLE" = "ON" ]; then
-say "Détecteur P I R en service..."
-RELANCEPIR=`ps -aux | grep control-pir.sh | wc -l`
-	if [[ "$RELANCEPIR" -ge 1 ]]; then 
-	RELANCEPIR="$RELANCEPIR"
+	if [ "$PIRINSTALLE" = "OFF" ]; then
+	say "Détecteur P I R en service..."
+	RELANCEPIR=`ps -aux | grep control-pir.sh | wc -l`
+		if [[ "$RELANCEPIR" -ge 1 ]]; then 
+		RELANCEPIR="$RELANCEPIR"
+		else
+		/home/pi/jarvis/plugins_installed/jarvis-plug-PIR/control-pir.sh &
+		fi
 	else
-	/home/pi/jarvis/plugins_installed/jarvis-plug-PIR/control-pir.sh &
+	say "Assistant à votre service..."
 	fi
 fi
+
