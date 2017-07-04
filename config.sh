@@ -3,7 +3,7 @@
 # A EFFACER dans le crontab cette ligne c'est rajouté */5 8-21 * * 1-5 ~/jarvis/jarvis.sh -x "mesurepir"
 # Avec plugin "jarvis-home-control" utilisera le mot "détecteur" pour le nom et numéroté l'adresse donnée pour le Pir-Virtuel ON/OFF (Domoticz Interupteur/Ajout manuel/Matériel Virtuel/Type Motion Sensor
 
-PIRINSTALLE="OFF"                         # Est ce qu'un PIR est installé si oui ON si non OFF il faudra le sorcer en posant la question "Qu'est que tu as à me dire"
+PIRINSTALLE="OFF"                         # Est ce qu'un PIR est installé si oui ON si non OFF il faudra le forcer en posant la question "Qu'est que tu as à me dire"
 PIROEILGAUCHE_GPIO="0"			 # GPIO Oeil Gauche
 PIROEILDROIT_GPIO="2" 			 # GPIO Oeil Droit
 PIRNEZ_GPIO="3"       			 # GPIO Nez
